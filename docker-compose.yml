@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    container_name: gigflow-backend-dev
+    restart: unless-stopped
+    ports:
+      - '5000:5000'
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+      - MONGO_URI=mongodb://mongodb:27017/gigflow
+      - JWT_SECRET=dev-secret-key-change-in-production
+      - CLIENT_URL=http://localhost:5173
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    volumes:
+      - ./apps/backend/src:/app/apps/backend/src
+      - ./packages/shared/src:/app/packages/shared/src
+    networks:
+      - gigflow-dev
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:5000/api/v1/health']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    command: npm run dev --workspace=apps/backend
+
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+    container_name: gigflow-frontend-dev
+    restart: unless-stopped
+    ports:
+      - '5173:5173'
+    environment:
+      - VITE_API_URL=http://localhost:5000/api/v1
+    depends_on:
+      - backend
+    volumes:
+      - ./apps/frontend/src:/app/apps/frontend/src
+      - ./packages/shared/src:/app/packages/shared/src
+    networks:
+      - gigflow-dev
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:5173/']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    command: npm run dev --workspace=apps/frontend
+
+  mongodb:
+    image: mongo:7-alpine
+    container_name: gigflow-mongodb-dev
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - gigflow-dev
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+networks:
+  gigflow-dev:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local

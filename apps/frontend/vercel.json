@@ -1,0 +1,9 @@
+{
+  "buildCommand": "cd ../.. && npm run build --workspace=@gigflow/shared && cd apps/frontend && tsc && vite build",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

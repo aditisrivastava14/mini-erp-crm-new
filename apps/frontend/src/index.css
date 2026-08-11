@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --primary: 24 100% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 24 100% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --border: 214.3 31.8% 91.4%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    /* Chart colors */
+    --chart-bg: 0 0% 100%;
+    --chart-grid: 214.3 31.8% 91.4%;
+    --chart-text: 222.2 84% 4.9%;
+  }
+
+  .dark {
+    --background: 217.2 32.6% 13%;
+    --foreground: 210 40% 98%;
+
+    --primary: 24 100% 56%;
+    --primary-foreground: 0 0% 100%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 24 100% 56%;
+    --accent-foreground: 0 0% 100%;
+
+    --border: 217.2 32.6% 20%;
+    
+    --card: 217.2 32.6% 12%;
+    --card-foreground: 210 40% 98%;
+
+    /* Chart colors for dark mode */
+    --chart-bg: 217.2 32.6% 13%;
+    --chart-grid: 217.2 32.6% 22%;
+    --chart-text: 210 40% 98%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    transition: background-color 200ms ease, color 200ms ease;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Recharts dark mode compatibility */
+.dark .recharts-default-tooltip {
+  background-color: hsl(var(--background)) !important;
+  border-color: hsl(var(--border)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+.dark .recharts-tooltip-label {
+  color: hsl(var(--foreground)) !important;
+}
+
+.dark .recharts-tooltip-item {
+  color: hsl(var(--foreground)) !important;
+}
+
+.dark .recharts-cartesian-axis-tick text {
+  fill: hsl(var(--muted-foreground)) !important;
+}
+
+.dark .recharts-cartesian-grid line {
+  stroke: hsl(var(--border)) !important;
+}
+
+.dark .recharts-legend-wrapper text {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Premium SaaS styling */
+@layer components {
+  .glass {
+    @apply rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-lg;
+  }
+
+  .glass-dark {
+    @apply dark:rounded-xl dark:bg-black/30 dark:backdrop-blur-md dark:border dark:border-white/10;
+  }
+
+  .premium-card {
+    @apply rounded-xl border border-border bg-card/50 backdrop-blur-sm shadow-sm transition-all duration-200 hover:shadow-md hover:border-primary/50;
+  }
+
+  .dark .premium-card {
+    @apply rounded-xl border border-border/60 bg-gradient-to-br from-muted/40 to-muted/20 backdrop-blur-sm shadow-sm transition-all duration-200 hover:shadow-md hover:border-primary/40;
+  }
+
+  .premium-button {
+    @apply relative inline-flex items-center justify-center font-medium transition-all duration-200;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+}
+
+/* Smooth theme transitions */
+html {
+  transition: background-color 200ms ease-in-out, color 200ms ease-in-out;
+}
+
+body {
+  transition: background-color 200ms ease-in-out;
+}
+
+* {
+  transition: background-color 200ms ease-in-out, color 200ms ease-in-out, border-color 200ms ease-in-out;
+}
+
+/* Prevent transition on page load */
+html.no-transition,
+html.no-transition * {
+  transition: none !important;
+}
+

@@ -1,0 +1,23 @@
+{
+  "name": "gigflow-crm",
+  "version": "1.0.0",
+  "description": "GigFlow CRM Monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "build": "npm run build --workspace=@gigflow/shared && npm run build --workspace=@gigflow/backend && npm run build --workspace=@gigflow/frontend",
+    "start": "npm run start --workspace=apps/backend",
+    "lint": "eslint .",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\""
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5"
+  }
+}
